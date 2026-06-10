@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pemutar Musik Sederhana GitHub</title>
+  
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #a1c4fd, #c2e9fb); /* Background warna gradasi */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .player-card {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 320px;
+    }
+    h2 { color: #333; margin-bottom: 5px; }
+    p { color: #777; font-size: 14px; margin-top: 0; }
+    
+    /* Mengatur ukuran pemutar audio bawaan browser */
+    audio {
+      width: 100%;
+      margin-top: 20px;
+      border-radius: 10px;
+    }
+    .playlist {
+      text-align: left;
+      margin-top: 20px;
+      border-top: 1px solid #eee;
+      padding-top: 15px;
+    }
+    .song-item {
+      padding: 10px;
+      background: #f9f9f9;
+      margin-bottom: 5px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .song-item:hover {
+      background: #e0f2fe; /* Berubah warna biru muda saat kursor menempel */
+    }
+  </style>
+</head>
+<body>
+
+  <div class="player-card">
+    <h2>Music Player 🎵</h2>
+    <p>Belajar Pemrograman Web (GitHub)</p>
+    
+    <h3 id="current-title">Pilih Lagu di Bawah</h3>
+    
+    <audio id="audio-player" controls></audio>
+
+    <div class="playlist">
+      <h4>Daftar Lagu:</h4>
+      
+      <div class="song-item" onclick="putarLagu('Position - Ariana', 'assets/ariana-grande-positions.mp3')">
+        1. Position - Ariana
+      </div>
+      
+      </div>
+  </div>
+
+  <script>
+    // Mengambil elemen HTML berdasarkan ID-nya
+    const player = document.getElementById('audio-player');
+    const titleDisplay = document.getElementById('current-title');
+
+    // Fungsi yang otomatis jalan saat daftar lagu diklik
+    function putarLagu(judul, lokasiFile) {
+      // 1. Mengubah teks judul di layar sesuai lagu yang diklik
+      titleDisplay.innerText = judul;
+      
+      // 2. Mengubah sumber file audio (.src) ke jalur folder lokal/GitHub
+      player.src = lokasiFile;
+      
+      // 3. Memuat ulang pemutar musik dengan file baru
+      player.load();
+      
+      // 4. Memutar lagu secara otomatis
+      player.play();
+    }
+  </script>
+</body>
+</html>
