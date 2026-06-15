@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Nebula Player | Modern Music</title>
+  <title>Music Player | Next Track</title>
   <style>
     * {
       margin: 0;
@@ -12,7 +12,6 @@
     }
 
     body {
-      /* Gradasi kekinian dengan nuansa neon gelap ke ungu terang */
       background: radial-gradient(circle at 10% 30%, #1e1a3e, #0b0b2b, #2a1a4a);
       background-attachment: fixed;
       font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, 'Poppins', sans-serif;
@@ -25,7 +24,6 @@
       position: relative;
     }
 
-    /* Partikel bintang kecil untuk kesan modern & space vibe */
     body::before {
       content: '';
       position: fixed;
@@ -97,7 +95,6 @@
       word-break: break-word;
     }
 
-    /* Styling audio player - transparan & modern */
     audio {
       width: 100%;
       margin: 15px 0 10px;
@@ -114,11 +111,41 @@
       border-radius: 50%;
     }
 
+    .controls {
+      display: flex;
+      justify-content: center;
+      margin: 8px 0 15px;
+    }
+    .next-btn {
+      background: linear-gradient(145deg, #5f43b0, #3d2a7a);
+      border: none;
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 8px 20px;
+      border-radius: 40px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      backdrop-filter: blur(4px);
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .next-btn:hover {
+      background: linear-gradient(145deg, #7a5ac9, #5a41a0);
+      transform: scale(1.02);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+    }
+    .next-btn:active {
+      transform: scale(0.98);
+    }
+
     .playlist {
       text-align: left;
-      margin-top: 28px;
+      margin-top: 20px;
       border-top: 1px solid rgba(160, 130, 255, 0.3);
-      padding-top: 20px;
+      padding-top: 18px;
     }
 
     .playlist h4 {
@@ -133,7 +160,7 @@
     }
 
     .playlist h4:before {
-      content: "✨";
+      content: "🎵";
       font-size: 1rem;
     }
 
@@ -161,7 +188,6 @@
       box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
     }
 
-    /* Nomor lagu rapi & modern */
     .song-item::before {
       content: "🎵";
       font-size: 1rem;
@@ -170,7 +196,6 @@
       opacity: 0.8;
     }
 
-    /* override dengan nomor urut otomatis dari CSS agar tidak duplikasi */
     .song-item:nth-child(1)::before { content: "1"; font-weight: bold; background: #3a2d6e; width: 28px; border-radius: 30px; display: inline-flex; justify-content: center; align-items: center; padding: 2px 0; }
     .song-item:nth-child(2)::before { content: "2"; font-weight: bold; background: #3a2d6e; width: 28px; border-radius: 30px; display: inline-flex; justify-content: center; }
     .song-item:nth-child(3)::before { content: "3"; font-weight: bold; background: #3a2d6e; width: 28px; border-radius: 30px; display: inline-flex; justify-content: center; }
@@ -182,7 +207,6 @@
     .song-item:nth-child(9)::before { content: "9"; font-weight: bold; background: #3a2d6e; width: 28px; border-radius: 30px; display: inline-flex; justify-content: center; }
     .song-item:nth-child(10)::before { content: "10"; font-weight: bold; background: #3a2d6e; width: 32px; border-radius: 30px; display: inline-flex; justify-content: center; }
 
-    /* efek lagu yang sedang diputar */
     .song-item.playing-now {
       background: linear-gradient(95deg, #5f43b0, #3d2a7a);
       border-left: 4px solid #e9b0ff;
@@ -201,23 +225,30 @@
       #current-title {
         font-size: 1rem;
       }
+      .next-btn {
+        padding: 6px 16px;
+        font-size: 0.85rem;
+      }
     }
   </style>
 </head>
 <body>
 
 <div class="player-card">
-  <h2>✦ NEBULA MUSIC</h2>
-  <div class="subhead">immersive audio · dreamy vibes</div>
+  <h2>🎧 Music Player</h2>
+  <div class="subhead">putar · nikmati · relaks</div>
   
-  <div id="current-title">🎧 pilih lagu favoritmu</div>
+  <div id="current-title">✨ pilih lagu favoritmu</div>
   
   <audio id="audio-player" controls preload="metadata"></audio>
+  
+  <div class="controls">
+    <button id="next-button" class="next-btn">⏩ Lagu Selanjutnya</button>
+  </div>
 
   <div class="playlist">
-    <h4>🎶 Playlist kekinian</h4>
+    <h4>Daftar Lagu</h4>
     
-    <!-- Data lagu dengan atribut lengkap -->
     <div class="song-item" data-title="Position - Ariana Grande" data-src="assets/ariana-grande-positions.mp3">Position - Ariana</div>
     <div class="song-item" data-title="Hindia - Membasuh" data-src="assets/hindia-membasuh.mp3">Hindia - Membasuh</div>
     <div class="song-item" data-title="Armada - Mau Dibawa Kemana" data-src="assets/mau-dibawa-kemana-armada.mp3">Armada - Mau Dibawa Kemana</div>
@@ -235,101 +266,119 @@
   (function() {
     const player = document.getElementById('audio-player');
     const titleDisplay = document.getElementById('current-title');
+    const nextBtn = document.getElementById('next-button');
     const songItems = document.querySelectorAll('.song-item');
-    let currentActiveItem = null;
-
-    // Fungsi untuk memutar lagu dengan error handling yang baik
-    function playSong(judul, filePath, element) {
-      if (!filePath) {
-        titleDisplay.innerHTML = "⚠️ File tidak ditemukan!";
-        return;
-      }
-
-      // Update judul lagu di player
-      titleDisplay.innerHTML = `🎵 ${judul}`;
-      
-      // Set sumber audio
-      player.src = filePath;
-      player.load();
-      
-      // Coba putar otomatis (karena user klik, biasanya diizinkan)
-      const playPromise = player.play();
-      
-      if (playPromise !== undefined) {
-        playPromise.catch(error => {
-          console.warn('Autoplay ditolak browser:', error);
-          titleDisplay.innerHTML = `🎧 ${judul} (klik tombol play)`;
-        });
-      }
-      
-      // Hapus highlight dari lagu sebelumnya
-      if (currentActiveItem) {
-        currentActiveItem.classList.remove('playing-now');
-      }
-      // Tambahkan highlight ke lagu yang aktif
-      if (element) {
-        element.classList.add('playing-now');
-        currentActiveItem = element;
-      }
-    }
-
-    // Event listener untuk setiap lagu
-    songItems.forEach(item => {
-      item.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const judul = item.getAttribute('data-title');
-        const srcFile = item.getAttribute('data-src');
-        
-        if (!srcFile) {
-          titleDisplay.innerHTML = "❌ File audio tidak valid";
-          return;
-        }
-        
-        playSong(judul, srcFile, item);
+    
+    // Buat array daftar lagu dari DOM
+    const playlist = [];
+    songItems.forEach((item, idx) => {
+      playlist.push({
+        element: item,
+        title: item.getAttribute('data-title'),
+        src: item.getAttribute('data-src'),
+        index: idx
       });
     });
     
-    // Penanganan error jika file audio gagal dimuat
+    let currentIndex = -1;  // -1 berarti belum ada lagu yang diputar
+    let currentActiveItem = null;
+    
+    // Fungsi untuk memutar lagu berdasarkan index
+    function playByIndex(index) {
+      if (index < 0 || index >= playlist.length) {
+        // Jika sudah di luar batas, berhenti atau reset
+        titleDisplay.innerHTML = "🏁 Akhir playlist | pilih lagu";
+        player.src = "";
+        if (currentActiveItem) {
+          currentActiveItem.classList.remove('playing-now');
+          currentActiveItem = null;
+        }
+        currentIndex = -1;
+        return;
+      }
+      
+      const song = playlist[index];
+      if (!song.src) {
+        titleDisplay.innerHTML = "⚠️ File tidak valid";
+        return;
+      }
+      
+      // Update highlight
+      if (currentActiveItem) {
+        currentActiveItem.classList.remove('playing-now');
+      }
+      song.element.classList.add('playing-now');
+      currentActiveItem = song.element;
+      currentIndex = index;
+      
+      // Set judul dan putar
+      titleDisplay.innerHTML = `🎵 ${song.title}`;
+      player.src = song.src;
+      player.load();
+      
+      const playPromise = player.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(error => {
+          console.warn('Autoplay ditolak:', error);
+          titleDisplay.innerHTML = `🎧 ${song.title} (klik play)`;
+        });
+      }
+    }
+    
+    // Fungsi next: maju ke lagu berikutnya
+    function nextTrack() {
+      if (currentIndex === -1) {
+        // Jika belum ada lagu yang diputar, putar lagu pertama
+        if (playlist.length > 0) {
+          playByIndex(0);
+        }
+      } else {
+        let nextIdx = currentIndex + 1;
+        if (nextIdx >= playlist.length) {
+          // Jika sudah di akhir, kembali ke awal (loop playlist)
+          nextIdx = 0;
+        }
+        playByIndex(nextIdx);
+      }
+    }
+    
+    // Event listener untuk tombol next
+    nextBtn.addEventListener('click', () => {
+      nextTrack();
+    });
+    
+    // Event listener ketika lagu selesai -> otomatis next
+    player.addEventListener('ended', () => {
+      if (currentIndex !== -1) {
+        nextTrack();
+      }
+    });
+    
+    // Event klik pada setiap lagu di playlist
+    songItems.forEach((item, idx) => {
+      item.addEventListener('click', (e) => {
+        e.stopPropagation();
+        playByIndex(idx);
+      });
+    });
+    
+    // Error handling jika file audio bermasalah
     player.addEventListener('error', (e) => {
       console.error('Audio error:', e);
       let errorMsg = "Gagal memuat audio. Periksa jalur file.";
       if (player.error && player.error.code === 4) {
-        errorMsg = "File tidak ditemukan. Cek kembali folder assets.";
+        errorMsg = "File tidak ditemukan. Cek folder assets.";
       }
       titleDisplay.innerHTML = `⚠️ ${errorMsg}`;
-      // reset highlight sementara
       if (currentActiveItem) {
         currentActiveItem.classList.remove('playing-now');
         currentActiveItem = null;
       }
+      currentIndex = -1;
     });
     
-    // Ketika lagu selesai diputar, biarkan judul tetap tapi hapus highlight (opsional)
-    player.addEventListener('ended', () => {
-      if (currentActiveItem) {
-        // kita biarkan highlight tetap agar user tahu lagu terakhir yang dipilih,
-        // tapi bisa diatur juga untuk menghapus setelah beberapa detik? tidak perlu.
-        titleDisplay.innerHTML = `✓ Lagu selesai | pilih lagu lain`;
-        setTimeout(() => {
-          if (titleDisplay.innerHTML.includes("selesai")) {
-            titleDisplay.innerHTML = "🎧 pilih lagu favoritmu";
-          }
-        }, 2000);
-      }
-    });
-    
-    // Jika user memainkan lagu dari kontrol audio (tanpa klik playlist), kita sync judul
-    player.addEventListener('play', () => {
-      if (player.src && !titleDisplay.innerHTML.includes(player.src)) {
-        // Kasus jarang, tetap aman
-      }
-    });
-    
-    // Inisialisasi: kosongkan source awal agar tidak error
+    // Inisialisasi: kosongkan source
     player.src = "";
-    
-    // perbaikan duplikasi nomor: sudah tidak ada karena CSS otomatis nomor 1-10
-    console.log("✅ Music player siap, background kekinian + bug fixed");
   })();
 </script>
 </body>
