@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Music Player | Pencarian Lagu</title>
+  <title>Music Player | Pencarian & Ikon Musik</title>
   <style>
     * {
       margin: 0;
@@ -238,25 +238,17 @@
       box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
     }
 
+    /* Ikon musik seragam untuk semua lagu, tanpa nomor urut */
     .song-item::before {
       content: "🎵";
-      font-size: 1rem;
+      font-size: 1.1rem;
       width: 32px;
       text-align: center;
-      opacity: 0.8;
+      opacity: 0.9;
+      flex-shrink: 0;
     }
 
-    .song-item:nth-child(1)::before { content: "1"; font-weight: bold; background: #3a2d6e; width: 28px; border-radius: 30px; display: inline-flex; justify-content: center; align-items: center; padding: 2px 0; }
-    .song-item:nth-child(2)::before { content: "2"; font-weight: bold; background: #3a2d6e; width: 28px; border-radius: 30px; display: inline-flex; justify-content: center; }
-    .song-item:nth-child(3)::before { content: "3"; font-weight: bold; background: #3a2d6e; width: 28px; border-radius: 30px; display: inline-flex; justify-content: center; }
-    .song-item:nth-child(4)::before { content: "4"; font-weight: bold; background: #3a2d6e; width: 28px; border-radius: 30px; display: inline-flex; justify-content: center; }
-    .song-item:nth-child(5)::before { content: "5"; font-weight: bold; background: #3a2d6e; width: 28px; border-radius: 30px; display: inline-flex; justify-content: center; }
-    .song-item:nth-child(6)::before { content: "6"; font-weight: bold; background: #3a2d6e; width: 28px; border-radius: 30px; display: inline-flex; justify-content: center; }
-    .song-item:nth-child(7)::before { content: "7"; font-weight: bold; background: #3a2d6e; width: 28px; border-radius: 30px; display: inline-flex; justify-content: center; }
-    .song-item:nth-child(8)::before { content: "8"; font-weight: bold; background: #3a2d6e; width: 28px; border-radius: 30px; display: inline-flex; justify-content: center; }
-    .song-item:nth-child(9)::before { content: "9"; font-weight: bold; background: #3a2d6e; width: 28px; border-radius: 30px; display: inline-flex; justify-content: center; }
-    .song-item:nth-child(10)::before { content: "10"; font-weight: bold; background: #3a2d6e; width: 32px; border-radius: 30px; display: inline-flex; justify-content: center; }
-
+    /* Hapus semua aturan khusus nomor urut yang sebelumnya ada */
     /* class untuk menyembunyikan lagu saat filter */
     .song-item.hidden {
       display: none;
@@ -291,6 +283,10 @@
       .search-icon {
         left: 14px;
         font-size: 0.9rem;
+      }
+      .song-item::before {
+        width: 28px;
+        font-size: 1rem;
       }
     }
   </style>
@@ -329,8 +325,6 @@
       <div class="song-item" data-title="Hello - Ular Berbisa" data-src="assets/Hello - Ular Berbisa.mp3">Hello - Ular Berbisa</div>
       <div class="song-item" data-title="Rossa - Tak Sanggup Lagi" data-src="assets/Rossa - Tak Sanggup Lagi.mp3">Rossa - Tak Sanggup Lagi</div>
       <div class="song-item" data-title="Raim Laode - Bersenja Gurau" data-src="assets/Bersenja Gurau - Raim Laode.mp3">Raim Laode - Bersenja Gurau</div>
-      <div class="song-item" data-title="Jikustik - Puisi.mp3" data-src="assets/Jikustik - Puisi.mp3">Jikustik - Puisi.mp3</div>
-      <div class="song-item" data-title="Sheila On 7 - Kita.mp3" data-src="assets/Sheila On 7 - Kita.mp3">Sheila On 7 - Kita.mp3</div>
     </div>
     
     <div id="no-results-msg" class="no-results-message">😢 Lagu tidak ditemukan, coba kata kunci lain</div>
@@ -494,18 +488,7 @@
     // Event listener untuk pencarian (live filter)
     searchInput.addEventListener('input', () => {
       filterPlaylist();
-      
-      // Opsional: jika lagu yang sedang diputar tiba-tiba terfilter (hidden), kita reset saja agar tidak bingung.
-      // Tapi karena lagu aktif sedang diputar, kita biarkan dia tetap diputar meskipun tersembunyi.
-      // Namun agar UX lebih baik, jika lagu aktif tersembunyi, kita tampilkan notifikasi kecil? Tidak perlu, cukup biarkan.
-      // Tapi jika user sengaja mencari lagu lain, tidak masalah. 
-      // Jika pengguna ingin memunculkan lagu aktif, bisa hapus pencarian.
-      // Untuk pengalaman optimal: jika lagu yang sedang diputar ter-hidden, kita tetap pertahankan pemutaran.
-      if (currentActiveItem && currentActiveItem.classList.contains('hidden')) {
-        // Lagu yang sedang diputar tersembunyi oleh filter, tapi tidak masalah, tetap berjalan.
-        // Kita hanya memberikan efek visual agar tidak bingung, kita bisa menambahkan pesan? Tidak perlu drastis.
-        // Biarkan pemutaran berjalan normal. User bisa clear search.
-      }
+      // Lagu yang sedang diputar bisa saja tersembunyi, tapi tidak masalah; user bisa clear search
     });
     
     // Error handling jika file audio bermasalah
@@ -529,8 +512,7 @@
     // Pastikan tidak ada lagu yang tersembunyi di awal
     resetSearchAndShowAll();
     
-    // Bonus: tambahkan tombol reset cepat (klik pada icon search? tidak perlu, tapi bisa ditambahkan efek double click pada search? biarkan)
-    // Juga agar lebih ramah: jika user menekan tombol enter di search, tidak melakukan apa-apa (biarkan filter berjalan)
+    // Tombol Escape untuk mereset pencarian
     searchInput.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         resetSearchAndShowAll();
