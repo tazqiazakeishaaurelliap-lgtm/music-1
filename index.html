@@ -1,491 +1,678 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Music Player | Modern & Pencarian</title>
-  <!-- Google Fonts & Font Awesome -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <title>Music Player | Grouped by Artist</title>
+    <!-- Google Fonts & Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    body {
-      background: linear-gradient(145deg, #10101e 0%, #1a1a2e 100%);
-      font-family: 'Inter', 'Segoe UI', sans-serif;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 1.5rem;
-      position: relative;
-    }
+        body {
+            background: linear-gradient(145deg, #10101e 0%, #1a1a2e 100%);
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            position: relative;
+        }
 
-    /* efek grid modern */
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: 
-        linear-gradient(rgba(80, 70, 150, 0.1) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(80, 70, 150, 0.1) 1px, transparent 1px);
-      background-size: 40px 40px;
-      pointer-events: none;
-      z-index: 0;
-    }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(80, 70, 150, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(80, 70, 150, 0.1) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
 
-    /* card utama */
-    .player-card {
-      position: relative;
-      z-index: 10;
-      width: 100%;
-      max-width: 460px;
-      background: rgba(20, 20, 35, 0.75);
-      backdrop-filter: blur(20px);
-      border-radius: 2.5rem;
-      padding: 1.8rem;
-      box-shadow: 0 25px 45px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
-      transition: transform 0.2s ease;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
+        .player-card {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 480px;
+            background: rgba(20, 20, 35, 0.75);
+            backdrop-filter: blur(20px);
+            border-radius: 2.5rem;
+            padding: 1.8rem;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+            transition: transform 0.2s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
 
-    .player-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.5);
-    }
+        .player-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.5);
+        }
 
-    /* header */
-    .player-header {
-      text-align: center;
-      margin-bottom: 1.5rem;
-    }
-    .player-header h1 {
-      font-size: 1.9rem;
-      font-weight: 800;
-      background: linear-gradient(120deg, #f0f0ff, #c0b5ff, #a090ff);
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      letter-spacing: -0.5px;
-    }
-    .player-header h1 i {
-      background: none;
-      color: #b9a9ff;
-      font-size: 1.8rem;
-    }
-    .badge {
-      background: rgba(100, 90, 150, 0.4);
-      backdrop-filter: blur(4px);
-      display: inline-block;
-      padding: 0.25rem 1rem;
-      border-radius: 40px;
-      font-size: 0.7rem;
-      font-weight: 500;
-      color: #cfc9ff;
-      margin-top: 8px;
-      border: 1px solid rgba(200, 180, 255, 0.3);
-    }
+        .player-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .player-header h1 {
+            font-size: 1.9rem;
+            font-weight: 800;
+            background: linear-gradient(120deg, #f0f0ff, #c0b5ff, #a090ff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: -0.5px;
+        }
+        .player-header h1 i {
+            background: none;
+            color: #b9a9ff;
+            font-size: 1.8rem;
+        }
+        .badge {
+            background: rgba(100, 90, 150, 0.4);
+            backdrop-filter: blur(4px);
+            display: inline-block;
+            padding: 0.25rem 1rem;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #cfc9ff;
+            margin-top: 8px;
+            border: 1px solid rgba(200, 180, 255, 0.3);
+        }
 
-    /* now playing */
-    .now-playing-area {
-      background: rgba(15, 15, 30, 0.6);
-      backdrop-filter: blur(12px);
-      border-radius: 1.8rem;
-      padding: 1rem 1.2rem;
-      margin-bottom: 1.5rem;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    .now-label {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      font-weight: 600;
-      color: #bbb0ff;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-    .track-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: #f0ebff;
-      word-break: break-word;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .track-title span {
-      background: linear-gradient(120deg, #ffffff, #d9ceff);
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
-    }
-    .disc-icon {
-      width: 36px;
-      height: 36px;
-      background: radial-gradient(circle at 30% 30%, #2a235a, #111030);
-      border-radius: 50%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 0 2px #7f66d4, 0 0 0 4px rgba(0,0,0,0.2);
-    }
-    .rotate {
-      animation: spin 4s linear infinite;
-    }
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
+        .now-playing-area {
+            background: rgba(15, 15, 30, 0.6);
+            backdrop-filter: blur(12px);
+            border-radius: 1.8rem;
+            padding: 1rem 1.2rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .now-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            color: #bbb0ff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .track-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #f0ebff;
+            word-break: break-word;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .track-title span {
+            background: linear-gradient(120deg, #ffffff, #d9ceff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .disc-icon {
+            width: 36px;
+            height: 36px;
+            background: radial-gradient(circle at 30% 30%, #2a235a, #111030);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 0 2px #7f66d4, 0 0 0 4px rgba(0, 0, 0, 0.2);
+            flex-shrink: 0;
+        }
+        .rotate {
+            animation: spin 4s linear infinite;
+        }
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
 
-    audio {
-      width: 100%;
-      margin: 0.5rem 0 0.8rem;
-      border-radius: 60px;
-    }
-    audio::-webkit-media-controls-panel {
-      background: #262240;
-      border-radius: 60px;
-    }
-    audio::-webkit-media-controls-play-button {
-      background-color: #8f76ff;
-      border-radius: 50%;
-    }
+        audio {
+            width: 100%;
+            margin: 0.5rem 0 0.8rem;
+            border-radius: 60px;
+        }
+        audio::-webkit-media-controls-panel {
+            background: #262240;
+            border-radius: 60px;
+        }
+        audio::-webkit-media-controls-play-button {
+            background-color: #8f76ff;
+            border-radius: 50%;
+        }
 
-    .next-btn {
-      background: linear-gradient(95deg, #3d2e74, #221d4a);
-      border: none;
-      color: white;
-      font-weight: 600;
-      padding: 0.7rem 1.4rem;
-      border-radius: 40px;
-      font-size: 0.85rem;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      transition: all 0.2s;
-      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(160, 130, 255, 0.5);
-    }
-    .next-btn:hover {
-      background: linear-gradient(95deg, #5a45a0, #3a2a6e);
-      gap: 14px;
-      transform: scale(1.02);
-    }
+        .next-btn {
+            background: linear-gradient(95deg, #3d2e74, #221d4a);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 0.7rem 1.4rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s;
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(160, 130, 255, 0.5);
+        }
+        .next-btn:hover {
+            background: linear-gradient(95deg, #5a45a0, #3a2a6e);
+            gap: 14px;
+            transform: scale(1.02);
+        }
 
-    /* search */
-    .search-container {
-      margin: 1rem 0 1.2rem;
-      position: relative;
-    }
-    .search-container i {
-      position: absolute;
-      left: 18px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #b3a6ff;
-      font-size: 0.9rem;
-    }
-    #search-input {
-      width: 100%;
-      background: rgba(25, 22, 50, 0.8);
-      border: 1px solid rgba(140, 110, 240, 0.5);
-      border-radius: 60px;
-      padding: 0.8rem 1rem 0.8rem 2.8rem;
-      font-size: 0.85rem;
-      color: #f0ebff;
-      font-weight: 500;
-      outline: none;
-      transition: all 0.2s;
-    }
-    #search-input:focus {
-      border-color: #a88aff;
-      box-shadow: 0 0 0 3px rgba(150, 100, 255, 0.3);
-    }
-    #search-input::placeholder {
-      color: #938ac7;
-    }
+        .search-container {
+            margin: 1rem 0 1.2rem;
+            position: relative;
+        }
+        .search-container i {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #b3a6ff;
+            font-size: 0.9rem;
+        }
+        #search-input {
+            width: 100%;
+            background: rgba(25, 22, 50, 0.8);
+            border: 1px solid rgba(140, 110, 240, 0.5);
+            border-radius: 60px;
+            padding: 0.8rem 1rem 0.8rem 2.8rem;
+            font-size: 0.85rem;
+            color: #f0ebff;
+            font-weight: 500;
+            outline: none;
+            transition: all 0.2s;
+        }
+        #search-input:focus {
+            border-color: #a88aff;
+            box-shadow: 0 0 0 3px rgba(150, 100, 255, 0.3);
+        }
+        #search-input::placeholder {
+            color: #938ac7;
+        }
 
-    /* playlist */
-    .playlist-section {
-      margin-top: 0.5rem;
-    }
-    .playlist-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #cdc2ff;
-      margin-bottom: 1rem;
-      border-left: 3px solid #a67cff;
-      padding-left: 12px;
-    }
-    .playlist-list {
-      max-height: 340px;
-      overflow-y: auto;
-      padding-right: 5px;
-      scrollbar-width: thin;
-    }
-    .playlist-list::-webkit-scrollbar {
-      width: 4px;
-    }
-    .playlist-list::-webkit-scrollbar-track {
-      background: #2a2355;
-      border-radius: 10px;
-    }
-    .playlist-list::-webkit-scrollbar-thumb {
-      background: #7f66cc;
-      border-radius: 10px;
-    }
+        .playlist-section {
+            margin-top: 0.5rem;
+        }
+        .playlist-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #cdc2ff;
+            margin-bottom: 1rem;
+            border-left: 3px solid #a67cff;
+            padding-left: 12px;
+        }
 
-    .song-item {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 0.7rem 1rem;
-      background: rgba(28, 25, 55, 0.6);
-      backdrop-filter: blur(4px);
-      margin-bottom: 10px;
-      border-radius: 60px;
-      cursor: pointer;
-      transition: all 0.2s;
-      border: 1px solid rgba(160, 130, 255, 0.2);
-      color: #e6deff;
-      font-weight: 500;
-      font-size: 0.85rem;
-    }
-    .song-item i {
-      width: 28px;
-      text-align: center;
-      font-size: 1rem;
-      color: #cfbdff;
-    }
-    .song-item .song-title {
-      flex: 1;
-    }
-    .song-item:hover {
-      background: rgba(80, 65, 155, 0.85);
-      transform: translateX(5px);
-      border-color: #bc95ff;
-    }
-    .song-item.playing {
-      background: linear-gradient(95deg, #4a3790, #2c2066);
-      border-left: 3px solid #ffc285;
-      box-shadow: 0 0 10px #a47eff;
-    }
-    .song-item.hidden {
-      display: none;
-    }
+        .playlist-list {
+            max-height: 380px;
+            overflow-y: auto;
+            padding-right: 5px;
+            scrollbar-width: thin;
+        }
+        .playlist-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        .playlist-list::-webkit-scrollbar-track {
+            background: #2a2355;
+            border-radius: 10px;
+        }
+        .playlist-list::-webkit-scrollbar-thumb {
+            background: #7f66cc;
+            border-radius: 10px;
+        }
 
-    .no-results {
-      background: rgba(30, 25, 70, 0.7);
-      border-radius: 50px;
-      padding: 1.2rem;
-      text-align: center;
-      color: #cbc0ff;
-      font-size: 0.8rem;
-      border: 1px dashed #b27eff;
-      display: none;
-    }
+        /* ===== GROUP STYLES ===== */
+        .playlist-group {
+            margin-bottom: 1rem;
+        }
+        .playlist-group.hidden-group {
+            display: none;
+        }
 
-    footer {
-      font-size: 0.65rem;
-      text-align: center;
-      margin-top: 1.5rem;
-      color: #756baa;
-    }
-  </style>
+        .artist-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0.4rem 0.8rem 0.4rem 0;
+            margin-bottom: 6px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #e4dcff;
+            border-bottom: 1px solid rgba(140, 110, 240, 0.25);
+            letter-spacing: 0.3px;
+            cursor: default;
+            user-select: none;
+        }
+        .artist-header i {
+            color: #b79eff;
+            font-size: 0.9rem;
+            width: 22px;
+            text-align: center;
+        }
+        .artist-header .artist-name {
+            flex: 1;
+        }
+        .artist-header .song-count {
+            font-size: 0.6rem;
+            font-weight: 400;
+            color: #9188c7;
+            background: rgba(80, 65, 155, 0.4);
+            padding: 0.15rem 0.7rem;
+            border-radius: 40px;
+            border: 1px solid rgba(160, 130, 255, 0.2);
+        }
+
+        .song-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 0.55rem 1rem 0.55rem 2.2rem;
+            background: rgba(28, 25, 55, 0.4);
+            backdrop-filter: blur(4px);
+            margin-bottom: 6px;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid rgba(160, 130, 255, 0.12);
+            color: #e6deff;
+            font-weight: 500;
+            font-size: 0.8rem;
+        }
+        .song-item i {
+            width: 24px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #cfbdff;
+            flex-shrink: 0;
+        }
+        .song-item .song-title {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .song-item:hover {
+            background: rgba(80, 65, 155, 0.85);
+            transform: translateX(5px);
+            border-color: #bc95ff;
+        }
+        .song-item.playing {
+            background: linear-gradient(95deg, #4a3790, #2c2066);
+            border-left: 3px solid #ffc285;
+            box-shadow: 0 0 10px #a47eff;
+        }
+        .song-item.hidden {
+            display: none;
+        }
+
+        .no-results {
+            background: rgba(30, 25, 70, 0.7);
+            border-radius: 50px;
+            padding: 1.2rem;
+            text-align: center;
+            color: #cbc0ff;
+            font-size: 0.8rem;
+            border: 1px dashed #b27eff;
+            display: none;
+            margin-top: 0.5rem;
+        }
+
+        footer {
+            font-size: 0.65rem;
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #756baa;
+        }
+
+        /* responsive */
+        @media (max-width: 420px) {
+            .player-card {
+                padding: 1.2rem;
+            }
+            .song-item {
+                padding: 0.5rem 0.8rem 0.5rem 1.6rem;
+                font-size: 0.75rem;
+            }
+            .artist-header {
+                font-size: 0.8rem;
+            }
+            .track-title {
+                font-size: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="player-card">
-  <div class="player-header">
-    <h1><i class="fas fa-headphones"></i> Music Player</h1>
-    <div class="badge"><i class="fas fa-waveform"></i> putar · cari · nikmati</div>
-  </div>
+    <div class="player-card">
+        <div class="player-header">
+            <h1><i class="fas fa-headphones"></i> Music Player</h1>
+            <div class="badge"><i class="fas fa-waveform"></i> grup · putar · cari</div>
+        </div>
 
-  <div class="now-playing-area">
-    <div class="now-label"><i class="fas fa-circle-play"></i> NOW PLAYING</div>
-    <div class="track-title">
-      <div class="disc-icon" id="discRotate"><i class="fas fa-record-vinyl"></i></div>
-      <span id="current-title">✨ pilih lagu favoritmu</span>
+        <div class="now-playing-area">
+            <div class="now-label"><i class="fas fa-circle-play"></i> NOW PLAYING</div>
+            <div class="track-title">
+                <div class="disc-icon" id="discRotate"><i class="fas fa-record-vinyl"></i></div>
+                <span id="current-title">✨ pilih lagu favoritmu</span>
+            </div>
+        </div>
+
+        <audio id="audio-player" controls preload="metadata"></audio>
+
+        <div style="display: flex; justify-content: center; margin: 8px 0 12px;">
+            <button id="next-button" class="next-btn"><i class="fas fa-forward-step"></i> Lagu Selanjutnya</button>
+        </div>
+
+        <div class="playlist-section">
+            <div class="playlist-header"><i class="fas fa-list-music"></i> Daftar Lagu</div>
+            <div class="search-container">
+                <i class="fas fa-search"></i>
+                <input type="text" id="search-input" placeholder="Cari judul atau artis..." autocomplete="off" />
+            </div>
+            <div class="playlist-list" id="playlist-container"></div>
+            <div id="no-results-msg" class="no-results"><i class="fas fa-binoculars"></i> Lagu tidak ditemukan, coba kata kunci lain</div>
+        </div>
+        <footer><i class="fas fa-head-side-headphones"></i> hi-fi player · grouped by artist</footer>
     </div>
-  </div>
 
-  <audio id="audio-player" controls preload="metadata"></audio>
+    <script>
+        (function() {
+            // ============================================================
+            //  DATA LAGU (artist, title, src)
+            // ============================================================
+            const songData = [{
+                artist: "Ariana Grande",
+                title: "Position",
+                src: "assets/ariana-grande-positions.mp3"
+            }, {
+                artist: "Hindia",
+                title: "Membasuh",
+                src: "assets/hindia-membasuh.mp3"
+            }, {
+                artist: "Armada",
+                title: "Mau Dibawa Kemana",
+                src: "assets/mau-dibawa-kemana-armada.mp3"
+            }, {
+                artist: "Kahitna",
+                title: "Titik Nadir",
+                src: "assets/KAHITNA-Titik Nadir.mp3"
+            }, {
+                artist: "Kahitna",
+                title: "Mantan Terindah",
+                src: "assets/KAHITNA-MANTAN TERINDAH.mp3"
+            }, {
+                artist: "Marcell",
+                title: "Firasat",
+                src: "assets/MARCELL-Firasat.mp3"
+            }, {
+                artist: "Acha & Irwansyah",
+                title: "My Heart",
+                src: "assets/ACHA SEPTRIASA - IRWANSYAH-My Heart.mp3"
+            }, {
+                artist: "Hello",
+                title: "Ular Berbisa",
+                src: "assets/Hello - Ular Berbisa.mp3"
+            }, {
+                artist: "Rossa",
+                title: "Tak Sanggup Lagi",
+                src: "assets/Rossa - Tak Sanggup Lagi.mp3"
+            }, {
+                artist: "Raim Laode",
+                title: "Bersenja Gurau",
+                src: "assets/Bersenja Gurau - Raim Laode.mp3"
+            }];
 
-  <div style="display: flex; justify-content: center; margin: 8px 0 12px;">
-    <button id="next-button" class="next-btn"><i class="fas fa-forward-step"></i> Lagu Selanjutnya</button>
-  </div>
+            // ============================================================
+            //  DOM refs
+            // ============================================================
+            const player = document.getElementById('audio-player');
+            const titleSpan = document.getElementById('current-title');
+            const nextBtn = document.getElementById('next-button');
+            const searchInput = document.getElementById('search-input');
+            const noResults = document.getElementById('no-results-msg');
+            const disc = document.getElementById('discRotate');
+            const container = document.getElementById('playlist-container');
 
-  <div class="playlist-section">
-    <div class="playlist-header"><i class="fas fa-list-music"></i> Daftar Lagu</div>
-    <div class="search-container">
-      <i class="fas fa-search"></i>
-      <input type="text" id="search-input" placeholder="Cari judul lagu..." autocomplete="off">
-    </div>
-    <div class="playlist-list" id="playlist-container">
-      <div class="song-item" data-title="Position - Ariana Grande" data-src="assets/ariana-grande-positions.mp3"><i class="fas fa-music"></i><span class="song-title">Position - Ariana Grande</span></div>
-      <div class="song-item" data-title="Hindia - Membasuh" data-src="assets/hindia-membasuh.mp3"><i class="fas fa-head-side-vr"></i><span class="song-title">Hindia - Membasuh</span></div>
-      <div class="song-item" data-title="Armada - Mau Dibawa Kemana" data-src="assets/mau-dibawa-kemana-armada.mp3"><i class="fas fa-guitar"></i><span class="song-title">Armada - Mau Dibawa Kemana</span></div>
-      <div class="song-item" data-title="Kahitna - Titik Nadir" data-src="assets/KAHITNA-Titik Nadir.mp3"><i class="fas fa-feather"></i><span class="song-title">Kahitna - Titik Nadir</span></div>
-      <div class="song-item" data-title="Kahitna - Mantan Terindah" data-src="assets/KAHITNA-MANTAN TERINDAH.mp3"><i class="fas fa-heart-broken"></i><span class="song-title">Kahitna - Mantan Terindah</span></div>
-      <div class="song-item" data-title="Marcell - Firasat" data-src="assets/MARCELL-Firasat.mp3"><i class="fas fa-eye"></i><span class="song-title">Marcell - Firasat</span></div>
-      <div class="song-item" data-title="ACHA & IRWANSYAH - My Heart" data-src="assets/ACHA SEPTRIASA - IRWANSYAH-My Heart.mp3"><i class="fas fa-heart"></i><span class="song-title">Acha & Irwansyah - My Heart</span></div>
-      <div class="song-item" data-title="Hello - Ular Berbisa" data-src="assets/Hello - Ular Berbisa.mp3"><i class="fas fa-skull"></i><span class="song-title">Hello - Ular Berbisa</span></div>
-      <div class="song-item" data-title="Rossa - Tak Sanggup Lagi" data-src="assets/Rossa - Tak Sanggup Lagi.mp3"><i class="fas fa-microphone-alt"></i><span class="song-title">Rossa - Tak Sanggup Lagi</span></div>
-      <div class="song-item" data-title="Raim Laode - Bersenja Gurau" data-src="assets/Bersenja Gurau - Raim Laode.mp3"><i class="fas fa-umbrella-beach"></i><span class="song-title">Raim Laode - Bersenja Gurau</span></div>
-      <div class="song-item" data-title="Sheila On 7 - Kita" data-src="assets/Sheila On 7 - Kita.mp3"><i class="fas fa-umbrella-beach"></i><span class="song-title">Sheila On 7 - Kita</span></div>
-    </div>
-    <div id="no-results-msg" class="no-results"><i class="fas fa-binoculars"></i> Lagu tidak ditemukan, coba kata kunci lain</div>
-  </div>
-  <footer><i class="fas fa-head-side-headphones"></i> hi-fi player · live search</footer>
-</div>
+            // ============================================================
+            //  Group data by artist
+            // ============================================================
+            const groups = {};
+            songData.forEach(song => {
+                if (!groups[song.artist]) groups[song.artist] = [];
+                groups[song.artist].push(song);
+            });
 
-<script>
-  (function() {
-    const player = document.getElementById('audio-player');
-    const titleSpan = document.getElementById('current-title');
-    const nextBtn = document.getElementById('next-button');
-    const songItems = document.querySelectorAll('.song-item');
-    const searchInput = document.getElementById('search-input');
-    const noResults = document.getElementById('no-results-msg');
-    const disc = document.getElementById('discRotate');
+            // Urutkan artist secara alfabetis
+            const sortedArtists = Object.keys(groups).sort((a, b) => a.localeCompare(b));
 
-    const playlist = [];
-    songItems.forEach((el, idx) => {
-      playlist.push({
-        element: el,
-        title: el.getAttribute('data-title'),
-        src: el.getAttribute('data-src'),
-        index: idx
-      });
-    });
+            // ============================================================
+            //  Render playlist
+            // ============================================================
+            let allSongItems = []; // [{ element, artist, title, src, groupKey }]
 
-    let currentIdx = -1;
-    let activeItem = null;
+            function renderPlaylist() {
+                container.innerHTML = '';
+                allSongItems = [];
 
-    // animasi disc
-    function setDiscSpin(playing) {
-      if (playing) disc.classList.add('rotate');
-      else disc.classList.remove('rotate');
-    }
+                sortedArtists.forEach(artist => {
+                    const songs = groups[artist];
+                    const groupDiv = document.createElement('div');
+                    groupDiv.className = 'playlist-group';
+                    groupDiv.dataset.artist = artist;
 
-    player.addEventListener('play', () => setDiscSpin(true));
-    player.addEventListener('pause', () => setDiscSpin(false));
-    player.addEventListener('ended', () => setDiscSpin(false));
+                    // --- header ---
+                    const header = document.createElement('div');
+                    header.className = 'artist-header';
+                    header.innerHTML = `
+                        <i class="fas fa-user"></i>
+                        <span class="artist-name">${artist}</span>
+                        <span class="song-count">${songs.length} lagu</span>
+                    `;
+                    groupDiv.appendChild(header);
 
-    // filter pencarian
-    function filterSongs() {
-      const keyword = searchInput.value.trim().toLowerCase();
-      let visible = 0;
-      playlist.forEach(song => {
-        const match = keyword === '' || song.title.toLowerCase().includes(keyword);
-        if (match) {
-          song.element.classList.remove('hidden');
-          visible++;
-        } else {
-          song.element.classList.add('hidden');
-        }
-      });
-      noResults.style.display = (visible === 0 && keyword !== '') ? 'flex' : 'none';
-    }
+                    // --- song items ---
+                    songs.forEach(song => {
+                        const item = document.createElement('div');
+                        item.className = 'song-item';
+                        item.dataset.artist = song.artist;
+                        item.dataset.title = song.title;
+                        item.dataset.src = song.src;
+                        item.innerHTML = `
+                            <i class="fas fa-music"></i>
+                            <span class="song-title">${song.title}</span>
+                        `;
+                        // klik -> play
+                        item.addEventListener('click', () => {
+                            const idx = allSongItems.findIndex(s => s.element === item);
+                            if (idx !== -1) playTrack(idx);
+                        });
+                        groupDiv.appendChild(item);
 
-    function resetSearch() {
-      if (searchInput.value !== '') {
-        searchInput.value = '';
-        filterSongs();
-      } else {
-        playlist.forEach(s => s.element.classList.remove('hidden'));
-        noResults.style.display = 'none';
-      }
-    }
+                        allSongItems.push({
+                            element: item,
+                            artist: song.artist,
+                            title: song.title,
+                            src: song.src,
+                            groupKey: artist
+                        });
+                    });
 
-    function ensureVisible(song) {
-      if (song.element.classList.contains('hidden')) {
-        resetSearch();
-        return true;
-      }
-      return false;
-    }
+                    container.appendChild(groupDiv);
+                });
+            }
 
-    function playTrack(index) {
-      if (index < 0 || index >= playlist.length) {
-        titleSpan.innerHTML = "🏁 Akhir playlist | pilih lagu";
-        player.src = "";
-        if (activeItem) activeItem.classList.remove('playing');
-        activeItem = null;
-        currentIdx = -1;
-        setDiscSpin(false);
-        return;
-      }
-      const song = playlist[index];
-      ensureVisible(song);
-      if (activeItem) activeItem.classList.remove('playing');
-      song.element.classList.add('playing');
-      activeItem = song.element;
-      currentIdx = index;
-      titleSpan.innerHTML = song.title;
-      player.src = song.src;
-      player.load();
-      player.play().catch(e => {
-        console.warn("autoplay ditolak", e);
-        titleSpan.innerHTML = song.title + " (klik play)";
-        setDiscSpin(false);
-      });
-    }
+            renderPlaylist();
 
-    function nextTrack() {
-      if (currentIdx === -1) {
-        if (playlist.length) playTrack(0);
-      } else {
-        let next = currentIdx + 1;
-        if (next >= playlist.length) next = 0;
-        playTrack(next);
-      }
-    }
+            // ============================================================
+            //  Player state
+            // ============================================================
+            let currentIdx = -1;
+            let activeItem = null;
 
-    // event
-    nextBtn.addEventListener('click', nextTrack);
-    player.addEventListener('ended', () => {
-      if (currentIdx !== -1) nextTrack();
-    });
+            function setDiscSpin(playing) {
+                if (playing) disc.classList.add('rotate');
+                else disc.classList.remove('rotate');
+            }
 
-    songItems.forEach((item, idx) => {
-      item.addEventListener('click', () => playTrack(idx));
-    });
+            player.addEventListener('play', () => setDiscSpin(true));
+            player.addEventListener('pause', () => setDiscSpin(false));
+            player.addEventListener('ended', () => setDiscSpin(false));
 
-    searchInput.addEventListener('input', filterSongs);
-    searchInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') resetSearch();
-    });
+            // ============================================================
+            //  Play / Next
+            // ============================================================
+            function playTrack(index) {
+                if (index < 0 || index >= allSongItems.length) {
+                    titleSpan.innerHTML = "🏁 Akhir playlist | pilih lagu";
+                    player.src = "";
+                    if (activeItem) activeItem.classList.remove('playing');
+                    activeItem = null;
+                    currentIdx = -1;
+                    setDiscSpin(false);
+                    return;
+                }
 
-    player.addEventListener('error', () => {
-      let errMsg = "Gagal memuat file. Pastikan folder 'assets' berisi semua MP3.";
-      titleSpan.innerHTML = `⚠️ ${errMsg}`;
-      if (activeItem) activeItem.classList.remove('playing');
-      activeItem = null;
-      currentIdx = -1;
-      setDiscSpin(false);
-    });
+                const song = allSongItems[index];
+                // pastikan visible (reset search jika tersembunyi)
+                if (song.element.classList.contains('hidden')) {
+                    resetSearch();
+                }
 
-    // inisialisasi
-    resetSearch();
-    player.src = "";
-  })();
-</script>
+                if (activeItem) activeItem.classList.remove('playing');
+                song.element.classList.add('playing');
+                activeItem = song.element;
+                currentIdx = index;
+                titleSpan.innerHTML = `${song.artist} — ${song.title}`;
+                player.src = song.src;
+                player.load();
+                player.play().catch(e => {
+                    console.warn("autoplay ditolak", e);
+                    titleSpan.innerHTML = `${song.artist} — ${song.title} (klik play)`;
+                    setDiscSpin(false);
+                });
+            }
+
+            function nextTrack() {
+                if (currentIdx === -1) {
+                    if (allSongItems.length) playTrack(0);
+                } else {
+                    let next = currentIdx + 1;
+                    if (next >= allSongItems.length) next = 0;
+                    playTrack(next);
+                }
+            }
+
+            nextBtn.addEventListener('click', nextTrack);
+            player.addEventListener('ended', () => {
+                if (currentIdx !== -1) nextTrack();
+            });
+
+            // ============================================================
+            //  Search / Filter
+            // ============================================================
+            function filterSongs() {
+                const keyword = searchInput.value.trim().toLowerCase();
+                let anyVisible = false;
+
+                // loop semua group
+                const groupsEl = container.querySelectorAll('.playlist-group');
+                groupsEl.forEach(groupEl => {
+                    const items = groupEl.querySelectorAll('.song-item');
+                    let groupHasVisible = false;
+
+                    items.forEach(item => {
+                        const artist = item.dataset.artist.toLowerCase();
+                        const title = item.dataset.title.toLowerCase();
+                        const match = keyword === '' || artist.includes(keyword) || title.includes(keyword);
+                        if (match) {
+                            item.classList.remove('hidden');
+                            groupHasVisible = true;
+                            anyVisible = true;
+                        } else {
+                            item.classList.add('hidden');
+                        }
+                    });
+
+                    // sembunyikan seluruh group jika tidak ada item yang terlihat
+                    if (groupHasVisible) {
+                        groupEl.classList.remove('hidden-group');
+                    } else {
+                        groupEl.classList.add('hidden-group');
+                    }
+                });
+
+                noResults.style.display = (anyVisible || keyword === '') ? 'none' : 'flex';
+                if (keyword === '') {
+                    noResults.style.display = 'none';
+                }
+            }
+
+            function resetSearch() {
+                if (searchInput.value !== '') {
+                    searchInput.value = '';
+                    filterSongs();
+                } else {
+                    // tampilkan semua
+                    container.querySelectorAll('.song-item').forEach(el => el.classList.remove('hidden'));
+                    container.querySelectorAll('.playlist-group').forEach(el => el.classList.remove('hidden-group'));
+                    noResults.style.display = 'none';
+                }
+            }
+
+            searchInput.addEventListener('input', filterSongs);
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') resetSearch();
+            });
+
+            // ============================================================
+            //  Error handling
+            // ============================================================
+            player.addEventListener('error', () => {
+                let errMsg = "Gagal memuat file. Pastikan folder 'assets' berisi semua MP3.";
+                titleSpan.innerHTML = `⚠️ ${errMsg}`;
+                if (activeItem) activeItem.classList.remove('playing');
+                activeItem = null;
+                currentIdx = -1;
+                setDiscSpin(false);
+            });
+
+            // ============================================================
+            //  Inisialisasi
+            // ============================================================
+            resetSearch();
+            player.src = "";
+        })();
+    </script>
 </body>
 </html>
